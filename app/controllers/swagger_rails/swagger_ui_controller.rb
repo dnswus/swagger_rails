@@ -9,10 +9,11 @@ module SwaggerRails
 
       swagger_filenames = Dir["#{swagger_root}/**/*.json"]
 
+      path, query = root_path.chomp('/').split('?', 2)
       @discovery_paths = Hash[
         swagger_filenames.map do |filename|
           [
-            filename.sub(swagger_root, root_path.chomp('/')),
+            [filename.sub(swagger_root, path.chomp('/')), query].compact.join('?'),
             load_json(filename)["info"]["title"]
           ]
         end
